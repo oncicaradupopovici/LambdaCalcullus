@@ -1,25 +1,32 @@
 ﻿module SamplePayrollScheme
 
-open Domain
+open Core
+open Combinators
 
 //HrAdmin elems
-let salariuBrut: PayrollElem<decimal> = HrAdmin.readFromDb "salariuBrut"
-let procentImpozit: PayrollElem<decimal> = HrAdmin.readFromDb "procentImpozit"
-let esteContractPrincipal: PayrollElem<bool> = HrAdmin.readFromDb "esteContractPrincipal"
+let salariuBrut = HrAdmin.readFromDb<decimal> "salariuBrut"
+let esteContractPrincipal = HrAdmin.readFromDb<bool> "esteContractPrincipal"
 
+//payroll constants
+let procentImpozit = Payroll.constant 0.23456m
 
 //Formula elems
 let impozitNerotunjit = procentImpozit * salariuBrut
 let impoziteleNerotunjiteAleCelorlalteContracte = impozitNerotunjit |> otherContracts
-let sumaImpozitelorNerotunjiteAleCelorlalteContracte = List.sum <!> impoziteleNerotunjiteAleCelorlalteContracte
+let sumaImpozitelorNerotunjiteAleCelorlalteContracte = impoziteleNerotunjiteAleCelorlalteContracte |> sum
+let impoziteleNerotunjitePeToateContractele = impozitNerotunjit |> allContracts
+let sumaImpozitelorNerotunjitePeToateContractele = impoziteleNerotunjitePeToateContractele |> sum
 let impozit = 
     When esteContractPrincipal
-        (ceiling (impozitNerotunjit + sumaImpozitelorNerotunjiteAleCelorlalteContracte) - sumaImpozitelorNerotunjiteAleCelorlalteContracte)
+        (ceiling sumaImpozitelorNerotunjitePeToateContractele - sumaImpozitelorNerotunjiteAleCelorlalteContracte)
         impozitNerotunjit
+
+let impozitelePeToateContractele = impozit |> allContracts
+let sumaImpozitelorPeToateContractele = impozit |> allContracts |> sum
 
 
 let salariuNet = salariuBrut - impozit
-let diferentaNetFataDeLunaTrecuta = (salariuNet |> lastMonth) - salariuNet
+let diferentaNetFataDeLunaTrecuta = salariuNet - (salariuNet |> lastMonth)
 
 
 

@@ -1,7 +1,6 @@
-﻿module Domain
+﻿module Core
 
 open NBB.Core.Effects.FSharp
-open System
 
 type ContractId = | ContractId of int
 type YearMonth = | YearMonth of year:int * month:int
@@ -34,7 +33,6 @@ module PayrollElemResult =
     let lift2 f = map f >> apply
 
     let flatten eff = bind id eff
-
 
 module PayrollElem =
     let map (func: 'a -> 'b) (eff: PayrollElem<'a>) : PayrollElem<'b> = 
@@ -74,40 +72,7 @@ module PayrollElems =
     let (>>=) eff func = PayrollElem.bind func eff
     let (>=>) = PayrollElem.composeK
 
-
-module HrAdmin = 
-    let readFromDb (_code:string) : PayrollElem<'a> = 
-        fun _contractId _yearMonth ->
-            effect {
-                return Error "Not implemented yet"
-            }
-
-    let getOtherContracts (ContractId contractId): Effect<ContractId list> = 
-        effect {
-            return [
-                ContractId contractId
-                ContractId (contractId + 10)
-                ContractId (contractId + 100)
-            ]
-        }
-
-[<AutoOpen>]
-module DecimalPayrollElems = 
-    let (*) = PayrollElem.lift2 (fun (a:decimal) b -> a * b)
-    let (+) = PayrollElem.lift2 (fun (a:decimal) b -> a + b)
-    let (-) = PayrollElem.lift2 (fun (a:decimal) b -> a - b)
-
-    let ceiling = PayrollElem.map (fun (a:decimal) -> Math.Ceiling a)
-
-
-[<AutoOpen>]
-module BooleanPayrollElems = 
-    let When (cond:PayrollElem<bool>) (e1:PayrollElem<'a>) (e2:PayrollElem<'a>) = 
-        elem {
-            let! cond' = cond
-            if cond' then return! e1 else return! e2
-        }
-
+    let constant = PayrollElem.return'
 
 [<RequireQualifiedAccess>]
 module List =
@@ -129,25 +94,6 @@ module List =
     let sequencePayrollElemResult list = traversePayrollElemResult id list
 
 
-
-[<AutoOpen>]
-module PayrollFns =
-    let lastMonth (elem: PayrollElem<'a>): PayrollElem<'a> = 
-        fun contractId yearMonth -> elem contractId (YearMonth.lastMonth yearMonth)
-
-    let otherContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
-        fun contractId yearMonth ->
-            effect {
-                let! otherContracts = HrAdmin.getOtherContracts contractId
-                let otherContractsElemResults = 
-                    otherContracts 
-                    |> List.map (fun otherContractId -> elem contractId yearMonth)
-                    |> List.sequencePayrollElemResult
-
-                return! otherContractsElemResults
-            }
-
-
 let eval (elem:PayrollElem<'a>) contractId yearMonth = 
     effect {
         let! result =  elem contractId yearMonth
@@ -155,6 +101,9 @@ let eval (elem:PayrollElem<'a>) contractId yearMonth =
         | Ok a -> return sprintf "%A" a
         | Error err -> return sprintf "Eroare: %s" err
     }
+
+module Payroll = 
+    let constant = PayrollElem.return'
     
 
 
