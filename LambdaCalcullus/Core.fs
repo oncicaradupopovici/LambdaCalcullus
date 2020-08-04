@@ -10,6 +10,7 @@ type PayrollElem<'a> = ContractId -> YearMonth -> PayrollElemResult<'a>
 
 module YearMonth = 
  let lastMonth (YearMonth (year, month)) = YearMonth (year, month-1)
+ let subStractMonth (n:int) (YearMonth (year, month)) = YearMonth (year, month-n)
 
 module PayrollElemResult = 
     let map (func: 'a -> 'b) (eff: PayrollElemResult<'a>) : PayrollElemResult<'b> = 

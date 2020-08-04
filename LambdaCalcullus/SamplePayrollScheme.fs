@@ -27,6 +27,7 @@ let sumaImpozitelorPeToateContractele = impozit |> allContracts |> sum
 
 let salariuNet = salariuBrut - impozit
 let diferentaNetFataDeLunaTrecuta = salariuNet - (salariuNet |> lastMonth)
+let mediaSalariuluiNetPeUltimele3Luni = salariuNet |> last_N_Months 3 |> avg
 
 
 

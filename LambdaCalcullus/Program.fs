@@ -20,6 +20,9 @@ let mainEff _argv =
         let! diferentaNetFataDeLunaTrecuta = eval diferentaNetFataDeLunaTrecuta (ContractId 1) (YearMonth (2020, 7))
         printfn "diferentaNetFataDeLunaTrecuta = %A" diferentaNetFataDeLunaTrecuta
 
+        let! mediaSalariuluiNetPeUltimele3Luni = eval mediaSalariuluiNetPeUltimele3Luni (ContractId 1) (YearMonth (2020, 7))
+        printfn "mediaSalariuluiNetPeUltimele3Luni = %A" mediaSalariuluiNetPeUltimele3Luni
+
 
         return 0
     }

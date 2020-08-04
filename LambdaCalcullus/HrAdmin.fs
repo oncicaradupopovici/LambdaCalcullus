@@ -23,6 +23,11 @@ let hrDb = dict [
         ContractId 11, {salariuBrut=1000.00m; esteContractPrincipal=false}
         ContractId 101, {salariuBrut=2000.00m; esteContractPrincipal=false}
     ]
+    YearMonth(2020, 5), dict [
+        ContractId 1, {salariuBrut=4000.00m; esteContractPrincipal=true}
+        ContractId 11, {salariuBrut=1000.00m; esteContractPrincipal=false}
+        ContractId 101, {salariuBrut=2000.00m; esteContractPrincipal=false}
+    ]
 ]
 
 let readFromDb<'a> (code:string) : PayrollElem<'a> =
