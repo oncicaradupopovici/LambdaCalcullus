@@ -1,6 +1,17 @@
 ﻿module SamplePayrollScheme
 
 open Core
+open NBB.Core.Effects.FSharp
+open System
+
+//custom elems
+let nrZileInLuna: PayrollElem<int> =
+    fun (ContractId _contractId) (YearMonth (year, month)) ->
+        effect {
+            return Result.Ok <| DateTime.DaysInMonth (year, month)
+        }
+
+
 open Combinators
 
 //HrAdmin elems
@@ -45,9 +56,13 @@ let sumaImpozitelorPeToateContractele' = sum (allContracts impozit)
 
 
 
-let salariuNet = salariuBrut - impozit
+let salariuNet = salariuBrut - impozit |> log "salariuNet"
 let diferentaNetFataDeLunaTrecuta = salariuNet - (salariuNet |> lastMonth)
 let mediaSalariuluiNetPeUltimele3Luni = salariuNet |> last_N_Months 3 |> avg
+
+
+
+        
 
 
 

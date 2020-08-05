@@ -5,7 +5,7 @@ open System
 open NBB.Core.Effects.FSharp
 
 [<AutoOpen>]
-module HrAlgebra =
+module HrCombinators =
     let lastMonth (elem: PayrollElem<'a>): PayrollElem<'a> = 
         fun contractId yearMonth -> elem contractId (YearMonth.lastMonth yearMonth)
 
@@ -45,7 +45,7 @@ module HrAlgebra =
             }
 
 [<AutoOpen>]
-module DecimalAlgebra = 
+module DecimalCombinators = 
     let (+) = PayrollElem.lift2 (fun (a:decimal) b -> a + b)
     let (-) = PayrollElem.lift2 (fun (a:decimal) b -> a - b)
     let (*) = PayrollElem.lift2 (fun (a:decimal) b -> a * b)
@@ -57,7 +57,7 @@ module DecimalAlgebra =
 
 
 [<AutoOpen>]
-module BooleanAlgebra = 
+module BooleanCombinators = 
     let When (cond:PayrollElem<bool>) (e1:PayrollElem<'a>) (e2:PayrollElem<'a>) = 
         elem {
             let! cond' = cond
@@ -70,6 +70,15 @@ module BooleanAlgebra =
     let (&&) = PayrollElem.lift2 (&&)
     let (||) = PayrollElem.lift2 (||)
     let (not) = PayrollElem.map (fun (x:bool) -> not x)
+
+[<AutoOpen>]
+module UtilityCombinators = 
+    let log elemCode (elem:PayrollElem<'a>) = 
+        fun (ContractId contractId) (YearMonth (year, month)) ->
+            effect {
+                printfn "evaluating elem %A on contractId:%A year:%A month:%A " elemCode contractId year month
+                return! elem (ContractId contractId) (YearMonth (year, month))
+            }
     
 
 
