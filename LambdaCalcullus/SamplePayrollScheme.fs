@@ -21,7 +21,7 @@ let esteActiv = HrAdmin.readFromDb<bool> "esteActiv"
 
 
 //payroll constants
-let procentImpozit = Payroll.constant 0.23456m
+let procentImpozit = Payroll.constant 0.23456m  |> log "procentImpozit" |> memoize
 
 //Formula elems
 let nuEsteActiv = not esteActiv
@@ -56,7 +56,7 @@ let sumaImpozitelorPeToateContractele' = sum (allContracts impozit)
 
 
 
-let salariuNet = salariuBrut - impozit |> log "salariuNet"
+let salariuNet = salariuBrut - impozit |> log "salariuNet" |> memoize
 let diferentaNetFataDeLunaTrecuta = salariuNet - (salariuNet |> lastMonth)
 let mediaSalariuluiNetPeUltimele3Luni = salariuNet |> last_N_Months 3 |> avg
 

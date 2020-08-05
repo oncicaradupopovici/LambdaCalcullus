@@ -76,8 +76,22 @@ module UtilityCombinators =
     let log elemCode (elem:PayrollElem<'a>) = 
         fun (ContractId contractId) (YearMonth (year, month)) ->
             effect {
-                printfn "evaluating elem %A on contractId:%A year:%A month:%A " elemCode contractId year month
+                printfn "*** LOG *** evaluating elem %A on contractId:%A year:%A month:%A " elemCode contractId year month
                 return! elem (ContractId contractId) (YearMonth (year, month))
+            }
+
+    let memoize (elem:PayrollElem<'a>) = 
+        fun (ContractId contractId) (YearMonth (year, month)) ->
+            
+            effect {
+                let! cachedValue = ElemCache.get elem (ContractId contractId) (YearMonth (year, month))
+                if cachedValue.IsSome 
+                then 
+                    return cachedValue.Value
+                else 
+                    let! value = elem (ContractId contractId) (YearMonth (year, month))
+                    do! ElemCache.set elem (ContractId contractId) (YearMonth (year, month)) value
+                    return value
             }
     
 
