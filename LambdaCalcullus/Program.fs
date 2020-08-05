@@ -23,6 +23,15 @@ let mainEff _argv =
         let! mediaSalariuluiNetPeUltimele3Luni = eval mediaSalariuluiNetPeUltimele3Luni (ContractId 1) (YearMonth (2020, 7))
         printfn "mediaSalariuluiNetPeUltimele3Luni = %A" mediaSalariuluiNetPeUltimele3Luni
 
+        let! esteContractPrincipalSiNuEsteActivAcum2Luni = eval esteContractPrincipalSiNuEsteActivAcum2Luni (ContractId 1) (YearMonth (2020, 7))
+        printfn "esteContractPrincipalSiNuEsteActivAcum2Luni = %A" esteContractPrincipalSiNuEsteActivAcum2Luni
+
+        let! esteContractPrincipalSiAreToateContracteleActive = eval esteContractPrincipalSiAreToateContracteleActive (ContractId 1) (YearMonth (2020, 7))
+        printfn "esteContractPrincipalSiAreToateContracteleActive = %A" esteContractPrincipalSiAreToateContracteleActive
+
+        let! esteContractPrincipalSiAreVreunContractInactivLunaTrecuta = eval esteContractPrincipalSiAreVreunContractInactivLunaTrecuta (ContractId 1) (YearMonth (2020, 7))
+        printfn "esteContractPrincipalSiAreVreunContractInactivLunaTrecuta = %A" esteContractPrincipalSiAreVreunContractInactivLunaTrecuta
+
 
         return 0
     }

@@ -9,7 +9,10 @@ module HrAlgebra =
     let lastMonth (elem: PayrollElem<'a>): PayrollElem<'a> = 
         fun contractId yearMonth -> elem contractId (YearMonth.lastMonth yearMonth)
 
-    let last_N_Months (n:int)(elem: PayrollElem<'a>): PayrollElem<'a list> = 
+    let nMonthsAgo (n:int) (elem: PayrollElem<'a>): PayrollElem<'a> = 
+        fun contractId yearMonth -> elem contractId (YearMonth.subStractMonth n yearMonth)
+
+    let last_N_Months (n:int) (elem: PayrollElem<'a>): PayrollElem<'a list> = 
         fun contractId yearMonth -> 
             [0..n-1] 
             |> List.map (fun x -> YearMonth.subStractMonth x yearMonth)
@@ -60,6 +63,14 @@ module BooleanAlgebra =
             let! cond' = cond
             if cond' then return! e1 else return! e2
         }
+
+    let all (xs:PayrollElem<bool list>) = xs |> PayrollElem.map (List.reduce (&&))
+    let any (xs:PayrollElem<bool list>) = xs |> PayrollElem.map (List.reduce (||))
+
+    let (&&) = PayrollElem.lift2 (&&)
+    let (||) = PayrollElem.lift2 (||)
+    let (not) = PayrollElem.map (fun (x:bool) -> not x)
+    
 
 
 
