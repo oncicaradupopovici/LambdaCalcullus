@@ -12,17 +12,18 @@ let procentImpozit = Payroll.constant 0.23456m
 
 //Formula elems
 let impozitNerotunjit = procentImpozit * salariuBrut
-let impoziteleNerotunjiteAleCelorlalteContracte = impozitNerotunjit |> otherContracts
-let sumaImpozitelorNerotunjiteAleCelorlalteContracte = impoziteleNerotunjiteAleCelorlalteContracte |> sum
-let impoziteleNerotunjitePeToateContractele = impozitNerotunjit |> allContracts
-let sumaImpozitelorNerotunjitePeToateContractele = impoziteleNerotunjitePeToateContractele |> sum
+let sumaImpozitelorNerotunjitePeToateContractele = impozitNerotunjit |> allContracts |> sum
+let sumaImpozitelorNerotunjitePeContracteleSecundare = 
+    (When esteContractPrincipal (constant 0m) impozitNerotunjit) |> allContracts |> sum
 let impozit = 
     When esteContractPrincipal
-        (ceiling sumaImpozitelorNerotunjitePeToateContractele - sumaImpozitelorNerotunjiteAleCelorlalteContracte)
+        (ceiling sumaImpozitelorNerotunjitePeToateContractele - sumaImpozitelorNerotunjitePeContracteleSecundare)
         impozitNerotunjit
 
+let impoziteleNerotunjitePeToateContractele = impozitNerotunjit |> allContracts
 let impozitelePeToateContractele = impozit |> allContracts
 let sumaImpozitelorPeToateContractele = impozit |> allContracts |> sum
+
 
 
 let salariuNet = salariuBrut - impozit
