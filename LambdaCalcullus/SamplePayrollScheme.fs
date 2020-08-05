@@ -23,6 +23,8 @@ let esteContractPrincipalSiNuEsteActivAcum3Luni = esteContractPrincipal && not e
 let esteContractPrincipalSiAreToateContracteleActive = esteContractPrincipal && esteActiv |> allContracts |> all
 let esteContractPrincipalSiAreVreunContractInactivLunaTrecuta = esteContractPrincipal && not esteActiv |> lastMonth |> allContracts |> any
 let esteActivUltimele3Luni = esteActiv |> last_N_Months 3 |> all
+let esteActivUltimele3Luni' = all <| last_N_Months 3 esteActiv
+let esteActivUltimele3Luni'' = all (last_N_Months 3 esteActiv)
 
 
 
