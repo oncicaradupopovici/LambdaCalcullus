@@ -32,6 +32,9 @@ let mainEff _argv =
         let! esteContractPrincipalSiAreVreunContractInactivLunaTrecuta = eval esteContractPrincipalSiAreVreunContractInactivLunaTrecuta (ContractId 1) (YearMonth (2020, 7))
         printfn "esteContractPrincipalSiAreVreunContractInactivLunaTrecuta = %A" esteContractPrincipalSiAreVreunContractInactivLunaTrecuta
 
+        let! ultimele3Luni = eval ultimele3Luni (ContractId 1) (YearMonth (2020, 7))
+        printfn "ultimele3Luni = %A" ultimele3Luni
+
 
         return 0
     }

@@ -18,9 +18,12 @@ module HrCombinators =
             |> List.map (fun x -> YearMonth.subStractMonth x yearMonth)
             |> List.map (fun ym -> elem contractId ym)
             |> List.sequencePayrollElemResult
+
+    let inMonth (yearMonth: YearMonth) (elem: PayrollElem<'a>): PayrollElem<'a> =
+        fun contractId _yearMonth -> elem contractId yearMonth
         
 
-    let otherContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
+    let otherEmployeeContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
         fun contractId yearMonth ->
             effect {
                 let! otherContracts = HrAdmin.getOtherContracts contractId
@@ -32,7 +35,7 @@ module HrCombinators =
                 return! otherContractsElemResults
             }
 
-    let allContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
+    let allEmployeeContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
         fun contractId yearMonth ->
             effect {
                 let! otherContracts = HrAdmin.getAllContracts contractId
@@ -93,6 +96,13 @@ module UtilityCombinators =
                     do! ElemCache.set elem (ContractId contractId) (YearMonth (year, month)) value
                     return value
             }
+
+[<AutoOpen>]
+module QueryCombinators =
+    let from = id
+    let select = id
+    let Then = id
+    let Else = id
     
 
 
