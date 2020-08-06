@@ -89,11 +89,15 @@ let sumaImpozitelorPeToateContractele' = sum (allEmployeeContracts impozit)
 
 let salariuNet = salariuBrut - impozit |> log "salariuNet" |> memoize
 let diferentaNetFataDeLunaTrecuta = salariuNet - (salariuNet |> from lastMonth)
-let mediaSalariuluiNetPeUltimele3Luni = salariuNet |> last_N_Months 3 |> avg
+
+let mediaSalariuluiNetPeUltimele3Luni = 
+    select salariuNet 
+    |> from last_N_Months 3
+    |> avg
 
 
 let ultimele3Luni = 
-    anLuna
+    select anLuna
     |> from last_N_Months 3
 
 
