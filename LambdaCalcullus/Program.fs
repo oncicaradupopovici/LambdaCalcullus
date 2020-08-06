@@ -5,6 +5,9 @@ open NBB.Core.Effects.FSharp
 
 let mainEff _argv = 
     effect {
+        let! nowOnce = eval now (ContractId 1) (YearMonth (2020, 7))
+        printfn "now = %A" nowOnce
+
         let! impoziteleNerotunjitePeToateContractele = eval impoziteleNerotunjitePeToateContractele (ContractId 1) (YearMonth (2020, 7))
         printfn "impoziteleNerotunjitePeToateContractele = %A" impoziteleNerotunjitePeToateContractele
 
@@ -34,6 +37,9 @@ let mainEff _argv =
 
         let! ultimele3Luni = eval ultimele3Luni (ContractId 1) (YearMonth (2020, 7))
         printfn "ultimele3Luni = %A" ultimele3Luni
+        
+        let! nowAgain = eval now (ContractId 1) (YearMonth (2020, 7))
+        printfn "now = %A" nowAgain
 
 
         return 0

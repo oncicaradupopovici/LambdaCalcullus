@@ -3,6 +3,8 @@
 open Core
 open Combinators
 open DefaultPayrollElems
+open System
+open NBB.Core.Effects.FSharp
 
 //HrAdmin elems
 let salariuBrut = HrAdmin.readFromDb<decimal> "salariuBrut"
@@ -12,6 +14,13 @@ let esteActiv = HrAdmin.readFromDb<bool> "esteActiv"
 
 //payroll constants
 let procentImpozit = Payroll.constant 0.23456m  |> log "procentImpozit" |> memoize
+
+
+//payroll lazy computed values
+let now = 
+    fun _ _ -> effect {
+        return DateTime.Now |> Ok
+    }
 
 //Formula elems
 let nuEsteActiv = not esteActiv
