@@ -2,11 +2,10 @@
 
 open NBB.Core.Effects.FSharp
 
-type ContractId = | ContractId of int
-type YearMonth = | YearMonth of year:int * month:int
-
-type PayrollElemResult<'a> = Effect<Result<'a, string>>
 type PayrollElem<'a> = ContractId -> YearMonth -> PayrollElemResult<'a>
+    and PayrollElemResult<'a> = Effect<Result<'a, string>>
+    and ContractId = | ContractId of int
+    and YearMonth = | YearMonth of year:int * month:int
 
 module YearMonth = 
  let lastMonth (YearMonth (year, month)) = YearMonth (year, month-1)

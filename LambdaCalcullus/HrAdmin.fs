@@ -2,7 +2,6 @@
 
 open Core
 open NBB.Core.Effects.FSharp
-open System.Collections
 
 
 type HrInfo = {
@@ -10,8 +9,6 @@ type HrInfo = {
     esteContractPrincipal: bool
     esteActiv: bool
 }
-
-type HrDb = Generic.IDictionary<YearMonth,Generic.IDictionary<ContractId, HrInfo>>
 
 let hrDb = dict [
     YearMonth(2020, 7), dict [
@@ -45,7 +42,7 @@ let readFromDb<'a> (code:string) : PayrollElem<'a> =
             | _ -> return Error "Elem not found"
         }
 
-let getOtherContracts (ContractId contractId): Effect<ContractId list> = 
+let getOtherEmployeeContracts (ContractId contractId): Effect<ContractId list> = 
     effect {
         return [
             ContractId (contractId + 10)
@@ -53,7 +50,7 @@ let getOtherContracts (ContractId contractId): Effect<ContractId list> =
         ]
     }
 
-let getAllContracts (ContractId contractId): Effect<ContractId list> = 
+let getAllEmployeeContracts (ContractId contractId): Effect<ContractId list> = 
     effect {
         return [
             ContractId contractId

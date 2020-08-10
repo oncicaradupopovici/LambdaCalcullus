@@ -26,7 +26,7 @@ module HrCombinators =
     let otherEmployeeContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
         fun contractId yearMonth ->
             effect {
-                let! otherContracts = HrAdmin.getOtherContracts contractId
+                let! otherContracts = HrAdmin.getOtherEmployeeContracts contractId
                 let otherContractsElemResults = 
                     otherContracts 
                     |> List.map (fun otherContractId -> elem otherContractId yearMonth)
@@ -38,7 +38,7 @@ module HrCombinators =
     let allEmployeeContracts (elem: PayrollElem<'a>): PayrollElem<'a list> =
         fun contractId yearMonth ->
             effect {
-                let! otherContracts = HrAdmin.getAllContracts contractId
+                let! otherContracts = HrAdmin.getAllEmployeeContracts contractId
                 let otherContractsElemResults = 
                     otherContracts 
                     |> List.map (fun otherContractId -> elem otherContractId yearMonth)
